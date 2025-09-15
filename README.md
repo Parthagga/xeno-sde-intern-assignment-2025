@@ -56,7 +56,7 @@ A comprehensive Customer Relationship Management platform with AI-powered custom
 - **Swagger** - API documentation
 
 ### AI & External Services
-- **OpenAI GPT-3.5** - Natural language processing
+- **Google Gemini Pro** - Natural language processing
 - **Google OAuth 2.0** - User authentication
 - **Simulated Vendor API** - Message delivery service
 
@@ -66,7 +66,7 @@ A comprehensive Customer Relationship Management platform with AI-powered custom
 - Node.js 18+ and npm
 - MySQL 8.0+
 - Google Cloud Console account (for OAuth)
-- OpenAI API key (for AI features)
+- Google Gemini API key (for AI features)
 
 ### 1. Clone the Repository
 ```bash
@@ -119,8 +119,8 @@ GOOGLE_CALLBACK_URL=http://localhost:5000/auth/google/callback
 # Session Configuration
 SESSION_SECRET=your_session_secret_here
 
-# OpenAI Configuration
-OPENAI_API_KEY=your_openai_api_key
+# Google Gemini Configuration
+GEMINI_API_KEY=your_gemini_api_key
 
 # Vendor API Configuration
 VENDOR_API_URL=http://localhost:5000/api/vendor
@@ -145,9 +145,9 @@ NEXT_PUBLIC_GOOGLE_CLIENT_ID=your_google_client_id
    - `http://localhost:5000/auth/google/callback`
 6. Copy Client ID and Client Secret to environment variables
 
-### 6. OpenAI Setup
-1. Go to [OpenAI Platform](https://platform.openai.com/)
-2. Create an API key
+### 6. Google Gemini Setup
+1. Go to [Google AI Studio](https://makersuite.google.com/app/apikey)
+2. Create a new API key
 3. Add the key to your backend environment variables
 
 ### 7. Start the Application
@@ -344,12 +344,13 @@ For support and questions:
 
 ## 🎉 Acknowledgments
 
-- OpenAI for providing the GPT API for natural language processing
+- Google for providing the Gemini API for natural language processing
 - Google for OAuth 2.0 authentication
 - The open-source community for the amazing tools and libraries used
 
 ---
 
 **Built with ❤️ for modern CRM needs**
-#   x e n o - s d e - i n t e r n - a s s i g n m e n t - 2 0 2 5  
+#   x e n o - s d e - i n t e r n - a s s i g n m e n t - 2 0 2 5 
+ 
  

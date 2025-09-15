@@ -1,6 +1,6 @@
 const express = require('express');
 const passport = require('passport');
-const OpenAI = require('openai');
+const { GoogleGenerativeAI } = require('@google/generative-ai');
 const pool = require('../config/database');
 
 const router = express.Router();
@@ -8,10 +8,9 @@ const router = express.Router();
 // Middleware to authenticate requests
 const authenticate = passport.authenticate('jwt', { session: false });
 
-// Initialize OpenAI
-const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY
-});
+// Initialize Google Generative AI (Gemini)
+const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
+const model = genAI.getGenerativeModel({ model: "gemini-pro" });
 
 // POST /api/ai/natural-language-to-rules - Convert natural language to segment rules
 router.post('/natural-language-to-rules', authenticate, async (req, res) => {
@@ -57,17 +56,10 @@ Examples:
 - "Active customers who haven't visited in 30 days" → {"operator": "AND", "conditions": [{"field": "status", "operator": "equals", "value": "active"}, {"field": "last_visit", "operator": "days_ago", "value": 30}]}
 - "High spenders or frequent buyers" → {"operator": "OR", "conditions": [{"field": "total_spent", "operator": "greater_than", "value": 15000}, {"field": "total_orders", "operator": "greater_than", "value": 10}]}`;
 
-    const completion = await openai.chat.completions.create({
-      model: "gpt-3.5-turbo",
-      messages: [
-        { role: "system", content: systemPrompt },
-        { role: "user", content: prompt }
-      ],
-      temperature: 0.1,
-      max_tokens: 500
-    });
-
-    const response = completion.choices[0].message.content.trim();
+    const fullPrompt = `${systemPrompt}\n\nUser Request: ${prompt}`;
+    
+    const result = await model.generateContent(fullPrompt);
+    const response = result.response.text().trim();
     
     try {
       const rules = JSON.parse(response);
@@ -126,17 +118,10 @@ Tone: ${tone}
 
 Generate 3 message templates.`;
 
-    const completion = await openai.chat.completions.create({
-      model: "gpt-3.5-turbo",
-      messages: [
-        { role: "system", content: systemPrompt },
-        { role: "user", content: userPrompt }
-      ],
-      temperature: 0.7,
-      max_tokens: 800
-    });
-
-    const response = completion.choices[0].message.content.trim();
+    const fullPrompt = `${systemPrompt}\n\n${userPrompt}`;
+    
+    const result = await model.generateContent(fullPrompt);
+    const response = result.response.text().trim();
     
     try {
       const suggestions = JSON.parse(response);
@@ -224,17 +209,10 @@ Performance Stats:
 
 Generate a performance summary.`;
 
-    const completion = await openai.chat.completions.create({
-      model: "gpt-3.5-turbo",
-      messages: [
-        { role: "system", content: systemPrompt },
-        { role: "user", content: userPrompt }
-      ],
-      temperature: 0.3,
-      max_tokens: 1000
-    });
-
-    const summary = completion.choices[0].message.content.trim();
+    const fullPrompt = `${systemPrompt}\n\n${userPrompt}`;
+    
+    const result = await model.generateContent(fullPrompt);
+    const summary = result.response.text().trim();
 
     // Store the AI insight
     await pool.execute(
@@ -329,17 +307,10 @@ ${activityStats.map(stat =>
 
 Provide scheduling recommendations.`;
 
-    const completion = await openai.chat.completions.create({
-      model: "gpt-3.5-turbo",
-      messages: [
-        { role: "system", content: systemPrompt },
-        { role: "user", content: userPrompt }
-      ],
-      temperature: 0.4,
-      max_tokens: 800
-    });
-
-    const response = completion.choices[0].message.content.trim();
+    const fullPrompt = `${systemPrompt}\n\n${userPrompt}`;
+    
+    const result = await model.generateContent(fullPrompt);
+    const response = result.response.text().trim();
     
     try {
       const suggestions = JSON.parse(response);
