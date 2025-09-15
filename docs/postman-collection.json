@@ -1,0 +1,454 @@
+{
+  "info": {
+    "name": "Mini CRM Platform API",
+    "description": "Complete API collection for Mini CRM Platform with authentication, customer management, segmentation, and campaign features.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{auth_token}}",
+        "type": "string"
+      }
+    ]
+  },
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://localhost:5000",
+      "type": "string"
+    },
+    {
+      "key": "auth_token",
+      "value": "",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "Authentication",
+      "item": [
+        {
+          "name": "Google OAuth Login",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/auth/google",
+              "host": ["{{base_url}}"],
+              "path": ["api", "auth", "google"]
+            }
+          }
+        },
+        {
+          "name": "Get Current User",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/auth/me",
+              "host": ["{{base_url}}"],
+              "path": ["api", "auth", "me"]
+            }
+          }
+        },
+        {
+          "name": "Verify Token",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"token\": \"your_jwt_token_here\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/auth/verify",
+              "host": ["{{base_url}}"],
+              "path": ["api", "auth", "verify"]
+            }
+          }
+        },
+        {
+          "name": "Logout",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/auth/logout",
+              "host": ["{{base_url}}"],
+              "path": ["api", "auth", "logout"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Customers",
+      "item": [
+        {
+          "name": "Get All Customers",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/customers?page=1&limit=20&search=&status=",
+              "host": ["{{base_url}}"],
+              "path": ["api", "customers"],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "limit",
+                  "value": "20"
+                },
+                {
+                  "key": "search",
+                  "value": ""
+                },
+                {
+                  "key": "status",
+                  "value": ""
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Create Customer",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"customer@example.com\",\n  \"name\": \"John Doe\",\n  \"phone\": \"+91-9876543210\",\n  \"date_of_birth\": \"1990-05-15\",\n  \"total_spent\": 15000.00,\n  \"total_orders\": 8,\n  \"status\": \"active\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/customers",
+              "host": ["{{base_url}}"],
+              "path": ["api", "customers"]
+            }
+          }
+        },
+        {
+          "name": "Bulk Create Customers",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"customers\": [\n    {\n      \"email\": \"customer1@example.com\",\n      \"name\": \"Customer One\",\n      \"total_spent\": 10000,\n      \"status\": \"active\"\n    },\n    {\n      \"email\": \"customer2@example.com\",\n      \"name\": \"Customer Two\",\n      \"total_spent\": 5000,\n      \"status\": \"inactive\"\n    }\n  ]\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/customers/bulk",
+              "host": ["{{base_url}}"],
+              "path": ["api", "customers", "bulk"]
+            }
+          }
+        },
+        {
+          "name": "Get Customer by ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/customers/1",
+              "host": ["{{base_url}}"],
+              "path": ["api", "customers", "1"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Orders",
+      "item": [
+        {
+          "name": "Get All Orders",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/orders?page=1&limit=20",
+              "host": ["{{base_url}}"],
+              "path": ["api", "orders"],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "limit",
+                  "value": "20"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Create Order",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"customer_id\": 1,\n  \"total_amount\": 2500.00,\n  \"status\": \"completed\",\n  \"items_count\": 3\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/orders",
+              "host": ["{{base_url}}"],
+              "path": ["api", "orders"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Segments",
+      "item": [
+        {
+          "name": "Get All Segments",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/segments",
+              "host": ["{{base_url}}"],
+              "path": ["api", "segments"]
+            }
+          }
+        },
+        {
+          "name": "Create Segment",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"High Value Customers\",\n  \"description\": \"Customers who have spent more than ₹10,000\",\n  \"rules\": {\n    \"field\": \"total_spent\",\n    \"operator\": \"greater_than\",\n    \"value\": 10000\n  }\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/segments",
+              "host": ["{{base_url}}"],
+              "path": ["api", "segments"]
+            }
+          }
+        },
+        {
+          "name": "Preview Segment",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"rules\": {\n    \"field\": \"total_spent\",\n    \"operator\": \"greater_than\",\n    \"value\": 10000\n  }\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/segments/preview",
+              "host": ["{{base_url}}"],
+              "path": ["api", "segments", "preview"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Campaigns",
+      "item": [
+        {
+          "name": "Get All Campaigns",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/campaigns",
+              "host": ["{{base_url}}"],
+              "path": ["api", "campaigns"]
+            }
+          }
+        },
+        {
+          "name": "Create Campaign",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Welcome Back Campaign\",\n  \"description\": \"Re-engage inactive customers\",\n  \"segment_id\": 1,\n  \"message_template\": \"Hi {name}, we miss you! Here's 10% off your next order.\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/campaigns",
+              "host": ["{{base_url}}"],
+              "path": ["api", "campaigns"]
+            }
+          }
+        },
+        {
+          "name": "Get Campaign Stats",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/campaigns/1/stats",
+              "host": ["{{base_url}}"],
+              "path": ["api", "campaigns", "1", "stats"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "AI Features",
+      "item": [
+        {
+          "name": "Natural Language to Rules",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"prompt\": \"People who spent more than ₹10,000 and haven't visited in 30 days\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/ai/natural-language-to-rules",
+              "host": ["{{base_url}}"],
+              "path": ["api", "ai", "natural-language-to-rules"]
+            }
+          }
+        },
+        {
+          "name": "Message Suggestions",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"campaignObjective\": \"Bring back inactive users\",\n  \"segmentDescription\": \"High Value Customers\",\n  \"tone\": \"friendly\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/ai/message-suggestions",
+              "host": ["{{base_url}}"],
+              "path": ["api", "ai", "message-suggestions"]
+            }
+          }
+        },
+        {
+          "name": "Performance Summary",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"campaignId\": 1\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/ai/performance-summary",
+              "host": ["{{base_url}}"],
+              "path": ["api", "ai", "performance-summary"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Vendor API",
+      "item": [
+        {
+          "name": "Send Message",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"message_id\": \"123\",\n  \"customer_id\": 1,\n  \"message_content\": \"Hi John, here's your personalized message!\",\n  \"callback_url\": \"http://localhost:5000/api/vendor/delivery-receipt\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/vendor/send",
+              "host": ["{{base_url}}"],
+              "path": ["api", "vendor", "send"]
+            }
+          }
+        },
+        {
+          "name": "Delivery Receipt",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"message_id\": \"123\",\n  \"status\": \"delivered\",\n  \"delivered_at\": \"2023-12-01T10:30:00Z\",\n  \"vendor_message_id\": \"vendor_123\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/vendor/delivery-receipt",
+              "host": ["{{base_url}}"],
+              "path": ["api", "vendor", "delivery-receipt"]
+            }
+          }
+        }
+      ]
+    }
+  ]
+}
