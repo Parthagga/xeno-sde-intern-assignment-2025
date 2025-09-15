@@ -18,7 +18,9 @@ const aiRoutes = require('./routes/ai');
 const swaggerRoutes = require('./routes/swagger');
 
 const app = express();
-const PORT = process.env.PORT || 5000;
+
+// Prefer API_PORT, then PORT, then fallback 5000
+const PORT = process.env.API_PORT || process.env.PORT || 5000;
 
 // Security middleware
 app.use(helmet());
@@ -58,8 +60,8 @@ app.use('/api-docs', swaggerRoutes);
 
 // Health check endpoint
 app.get('/health', (req, res) => {
-  res.json({ 
-    status: 'OK', 
+  res.json({
+    status: 'OK',
     timestamp: new Date().toISOString(),
     environment: process.env.NODE_ENV || 'development'
   });
@@ -86,10 +88,22 @@ app.use('*', (req, res) => {
   });
 });
 
-app.listen(PORT, () => {
-  console.log(`🚀 Server running on port ${PORT}`);
-  console.log(`📚 API Documentation: http://localhost:${PORT}/api-docs`);
-  console.log(`🏥 Health Check: http://localhost:${PORT}/health`);
+// Start server and handle common listen errors gracefully
+const server = app.listen(PORT, () => {
+  console.log(🚀 Server running on port ${PORT});
+  console.log(📚 API Documentation: http://localhost:${PORT}/api-docs);
+  console.log(🏥 Health Check: http://localhost:${PORT}/health);
 });
 
-module.exports = app;
+server.on('error', (err) => {
+  if (err.code === 'EADDRINUSE') {
+    console.error(⛔ Port ${PORT} is already in use. Stop the process using this port or set API_PORT in your .env to a free port.);
+    console.error(Try: lsof -i :${PORT}  # then kill <PID>);
+    process.exit(1);
+  } else {
+    console.error('Server error:', err);
+    process.exit(1);
+  }
+});
+
+module.exports = app;
