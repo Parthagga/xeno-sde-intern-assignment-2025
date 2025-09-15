@@ -229,7 +229,7 @@ The API is fully documented with Swagger UI. Access it at `http://localhost:5000
 
 1. **Natural Language Input**:
    ```
-   "People who spent more than ₹10,000 and haven't visited in 30 days"
+   People who spent more than ₹10,000 and haven't visited in 30 days
    ```
 
 2. **AI Converts to Rules**:
@@ -351,6 +351,7 @@ For support and questions:
 ---
 
 **Built with ❤️ for modern CRM needs**
-#   x e n o - s d e - i n t e r n - a s s i g n m e n t - 2 0 2 5 
- 
+
+# xeno-sde-intern-assignment-2025
+
  
